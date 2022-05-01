@@ -18,3 +18,34 @@
     background-color: #000;
     color: #fff;
 }
+
+/* User Profile  */
+
+/* Repo list */
+.repo_list input {
+    margin-block:20px 30px;
+    padding: 10px 14px;
+    width: 65%;
+    border-radius: 8px;
+    border: 1px solid #b5b2b2;
+}
+.repo{
+    border-bottom: 1px solid #b5b2b2;
+}
+.repo h5{
+    font-size:18px;
+    color:#0c6bdb;
+    margin-bottom: 0px;
+}
+.repo .vis-box{
+    border: 1px solid #b5b2b2;
+    border-radius: 8px;
+    font-size:12px;
+    width: 45px;
+    text-align: center;
+    text-transform: capitalize;
+}
+.project-details span{
+    margin-right:10px;
+    font-size:14px;
+}
