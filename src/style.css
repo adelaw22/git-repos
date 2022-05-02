@@ -19,7 +19,21 @@
     color: #fff;
 }
 
+.loading-img{
+    width: 20%;
+    position: absolute;
+    left: 40%;
+}
+
 /* User Profile  */
+.user-details img{
+    width: 50%;
+    margin-bottom: 13px;
+
+}
+.user-details span{
+    margin-right:15px;
+}
 
 /* Repo list */
 .repo_list input {

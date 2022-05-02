@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { AiOutlineFork, AiOutlineStar } from 'react-icons/ai'
 
@@ -7,11 +8,16 @@ const RepoList = () => {
   const [filteredData, setFilteredData] = useState([])
   const [searchInput, setSearchInput] = useState('')
 
+  const auth = useSelector((state) => state.auth)
+  const { repos_url } = auth.user
+
   useEffect(() => {
-    axios.get(`https://api.github.com/users/mojombo/repos`).then((response) => {
+    axios.get(`${repos_url}`).then((response) => {
       setRepoData(response.data)
+      let repos = repoData.filter((repo) => repo.private === false)
+      setFilteredData(repos)
     })
-  }, [])
+  }, [repoData, repos_url])
 
   const handleSearch = (searchValue) => {
     setSearchInput(searchValue)

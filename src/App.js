@@ -4,7 +4,6 @@ import {
   Route,
   Navigate,
   useNavigate,
-  Link,
 } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authAction } from './store/authSlice'
@@ -14,22 +13,10 @@ import axios from 'axios'
 import Userprofile from './Userprofile'
 import { AiFillGithub } from 'react-icons/ai'
 import './style.css'
+import Loader from './images/Loading_icon.gif'
 
 // Login section
 function Login() {
-  const dispatch = useDispatch()
-  const { login } = authAction
-  const navigate = useNavigate()
-
-  const handleSubmit = () => {
-    // dispatch(login())
-    // navigate('/user-repos')
-    // ;<Navigate
-    //   replace
-    //   to="https://github.com/login/oauth/authorize?scope=user&client_id=4d3b30605fde84f09463&redirect_uri=http://localhost:5000/auth/github/callback"
-    // />
-  }
-
   return (
     <div className="login-card">
       <h2>Github User Repositories</h2>
@@ -53,9 +40,13 @@ function ProtectedRoutes({ children, isLoggedIn }) {
 
 function CallBack() {
   const state = useSelector((state) => state.auth)
-  const { proxy_url } = state
+  const { proxy_url, isLoading } = state
+  const dispatch = useDispatch()
+  const { login, setLoading } = authAction
+  const navigate = useNavigate()
 
   useEffect(() => {
+    dispatch(setLoading(true))
     const url = window.location.href
     const hasCode = url.includes('?code=')
 
@@ -64,46 +55,23 @@ function CallBack() {
       window.history.pushState({}, null, newUrl[0])
 
       const data = { code: newUrl[1] }
-      console.log(data)
 
-      axios.post(`${proxy_url}authenticate`).then(function (response) {
-        console.log(response)
+      axios.post(`${proxy_url}authenticate`, data).then(function (response) {
+        const { data } = response
+        dispatch(login(data))
+        dispatch(setLoading(false))
+        navigate('/user-repos')
       })
     }
+  }, [dispatch, login, navigate, proxy_url, setLoading])
 
-    // if (hasCode) {
-    //   const newUrl = url.split("?code=");
-    //   window.history.pushState({}, null, newUrl[0]);
-    //   setData({ ...data, isLoading: true });
-
-    //   const requestData = {
-    //     code: newUrl[1]
-    //   };
-
-    //   const proxy_url = state.proxy_url;
-
-    //   // Use code parameter and other parameters to make POST request to proxy_server
-    //   fetch(proxy_url, {
-    //     method: "POST",
-    //     body: JSON.stringify(requestData)
-    //   })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       dispatch({
-    //         type: "LOGIN",
-    //         payload: { user: data, isLoggedIn: true }
-    //       });
-    //     })
-    //     .catch(error => {
-    //       setData({
-    //         isLoading: false,
-    //         errorMessage: "Sorry! Login failed"
-    //       });
-    //     });
-    // }
-  }, [])
-
-  return <p>callback</p>
+  if (isLoading) {
+    return (
+      <div>
+        <img className="loading-img" src={Loader} alt="" />
+      </div>
+    )
+  }
 }
 
 function App() {
