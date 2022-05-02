@@ -22,7 +22,7 @@ const User = () => {
   } = auth.user
 
   return (
-    <div className="user-profile container">
+    <div className="user-profile container mt-5">
       <div className="row">
         <div className="user-details col-md-3">
           <img src={avatar_url} alt="" />
